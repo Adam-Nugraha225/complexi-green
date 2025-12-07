@@ -1,96 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Forest-Mist Color Palette */
+    --forest-deep: 157 100% 16%;
+    --emerald-dark: 180 100% 10%;
+    --mist-silver: 189 16% 78%;
+    --blush-accent: 0 36% 81%;
+    
+    /* Design System */
+    --background: 180 100% 10%;
+    --foreground: 189 16% 78%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 157 100% 12%;
+    --card-foreground: 189 16% 78%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 180 100% 10%;
+    --popover-foreground: 189 16% 78%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 157 100% 16%;
+    --primary-foreground: 189 16% 90%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 180 100% 10%;
+    --secondary-foreground: 189 16% 78%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 157 50% 20%;
+    --muted-foreground: 189 16% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 0 36% 81%;
+    --accent-foreground: 180 100% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 189 16% 30%;
+    --input: 189 16% 25%;
+    --ring: 0 36% 81%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Custom Design Tokens */
+    --gradient-forest-mist: linear-gradient(135deg, hsl(157 100% 16%), hsl(189 16% 78%), hsl(0 36% 81%));
+    --gradient-hero: linear-gradient(180deg, hsl(180 100% 10%), hsl(157 100% 16%));
+    --gradient-card: linear-gradient(145deg, hsla(157 100% 16% / 0.6), hsla(180 100% 10% / 0.8));
+    --gradient-glow: radial-gradient(circle at 50% 50%, hsla(0 36% 81% / 0.3), transparent 70%);
+    
+    --glass-bg: hsla(180 100% 10% / 0.7);
+    --glass-border: hsla(189 16% 78% / 0.2);
+    --glass-shadow: 0 8px 32px hsla(180 100% 5% / 0.3);
+    
+    --shadow-soft: 0 4px 24px hsla(180 100% 5% / 0.4);
+    --shadow-glow: 0 0 40px hsla(0 36% 81% / 0.3);
+    --shadow-deep: 0 20px 60px hsla(180 100% 5% / 0.5);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 180 100% 10%;
+    --sidebar-foreground: 189 16% 78%;
+    --sidebar-primary: 157 100% 16%;
+    --sidebar-primary-foreground: 189 16% 90%;
+    --sidebar-accent: 0 36% 81%;
+    --sidebar-accent-foreground: 180 100% 10%;
+    --sidebar-border: 189 16% 25%;
+    --sidebar-ring: 0 36% 81%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 180 100% 10%;
+    --foreground: 189 16% 78%;
+    --card: 157 100% 12%;
+    --card-foreground: 189 16% 78%;
+    --popover: 180 100% 10%;
+    --popover-foreground: 189 16% 78%;
+    --primary: 157 100% 16%;
+    --primary-foreground: 189 16% 90%;
+    --secondary: 180 100% 10%;
+    --secondary-foreground: 189 16% 78%;
+    --muted: 157 50% 20%;
+    --muted-foreground: 189 16% 65%;
+    --accent: 0 36% 81%;
+    --accent-foreground: 180 100% 10%;
+    --border: 189 16% 30%;
+    --input: 189 16% 25%;
+    --ring: 0 36% 81%;
   }
 }
 
@@ -99,7 +93,316 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  html {
+    scroll-behavior: smooth;
   }
+
+  body {
+    @apply bg-background text-foreground font-poppins antialiased;
+    background: linear-gradient(180deg, hsl(180 100% 10%), hsl(157 100% 14%));
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Card */
+  .glass-card {
+    @apply relative overflow-hidden rounded-2xl;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, hsla(189 16% 78% / 0.05), transparent);
+    pointer-events: none;
+  }
+
+  /* Pill Button */
+  .btn-pill {
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-semibold text-foreground rounded-full transition-all duration-300 overflow-hidden;
+    background: linear-gradient(135deg, hsl(180 100% 10%), hsl(157 100% 16%));
+    border: 1px solid hsla(189 16% 78% / 0.3);
+  }
+
+  .btn-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px hsla(0 36% 81% / 0.4), var(--shadow-soft);
+    border-color: hsl(0 36% 81%);
+  }
+
+  .btn-pill-accent {
+    @apply btn-pill;
+    background: linear-gradient(135deg, hsl(0 36% 81%), hsl(0 36% 75%));
+    color: hsl(180 100% 10%);
+  }
+
+  .btn-pill-accent:hover {
+    box-shadow: 0 0 40px hsla(0 36% 81% / 0.5);
+  }
+
+  /* Code Block */
+  .code-block {
+    @apply rounded-2xl overflow-hidden;
+    background: hsla(180 100% 10% / 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .code-block pre {
+    @apply p-6 overflow-x-auto;
+    font-family: 'JetBrains Mono', monospace;
+    color: hsl(189 16% 78%);
+  }
+
+  .code-block .keyword {
+    color: hsl(0 36% 81%);
+    font-weight: 500;
+  }
+
+  .code-block .function {
+    color: hsl(157 100% 50%);
+  }
+
+  .code-block .number {
+    color: hsl(0 36% 81%);
+  }
+
+  .code-block .string {
+    color: hsl(40 100% 70%);
+  }
+
+  .code-block .comment {
+    color: hsl(189 16% 50%);
+    font-style: italic;
+  }
+
+  /* Result Panel */
+  .result-panel {
+    @apply rounded-2xl p-6;
+    background: hsl(157 100% 16%);
+    border: 1px solid hsla(189 16% 78% / 0.2);
+    box-shadow: 0 0 30px hsla(189 16% 78% / 0.1);
+  }
+
+  .result-panel .result-value {
+    color: hsl(0 36% 81%);
+  }
+
+  /* Data Table */
+  .data-table {
+    @apply w-full rounded-2xl overflow-hidden;
+    border: 1px solid var(--glass-border);
+  }
+
+  .data-table thead {
+    background: hsl(180 100% 10%);
+  }
+
+  .data-table th {
+    @apply px-4 py-4 text-left font-semibold;
+    color: hsl(189 16% 78%);
+  }
+
+  .data-table tbody tr:nth-child(odd) {
+    background: hsla(157 100% 16% / 0.5);
+  }
+
+  .data-table tbody tr:nth-child(even) {
+    background: hsla(180 100% 10% / 0.5);
+  }
+
+  .data-table td {
+    @apply px-4 py-3;
+    color: hsl(189 16% 78%);
+  }
+
+  .data-table .highlight {
+    color: hsl(0 36% 81%);
+    font-weight: 600;
+  }
+
+  /* Visualization Box */
+  .vis-box {
+    @apply flex items-center justify-center w-14 h-14 rounded-xl font-mono font-bold text-lg;
+    background: hsla(189 16% 78% / 0.2);
+    border: 1px solid hsla(189 16% 78% / 0.3);
+    color: hsl(189 16% 78%);
+    transition: all 0.3s ease;
+  }
+
+  .vis-box.active {
+    background: hsl(0 36% 81%);
+    color: hsl(180 100% 10%);
+    transform: scale(1.15);
+    box-shadow: 0 0 30px hsla(0 36% 81% / 0.5);
+  }
+
+  /* Section Title */
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold mb-4;
+    background: linear-gradient(135deg, hsl(189 16% 78%), hsl(0 36% 81%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-subtitle {
+    @apply text-lg md:text-xl;
+    color: hsla(189 16% 78% / 0.7);
+  }
+
+  /* Tab Switch */
+  .tab-switch {
+    @apply inline-flex rounded-full p-1;
+    background: hsla(180 100% 10% / 0.8);
+    border: 1px solid var(--glass-border);
+  }
+
+  .tab-switch button {
+    @apply px-5 py-2 rounded-full font-medium transition-all duration-300;
+    color: hsl(189 16% 78%);
+  }
+
+  .tab-switch button.active {
+    background: linear-gradient(135deg, hsl(157 100% 16%), hsl(180 100% 12%));
+    color: hsl(0 36% 81%);
+  }
+
+  /* Animation Controls */
+  .anim-control {
+    @apply flex items-center justify-center w-12 h-12 rounded-full transition-all duration-200;
+    background: hsla(189 16% 78% / 0.1);
+    border: 1px solid hsla(189 16% 78% / 0.2);
+    color: hsl(189 16% 78%);
+  }
+
+  .anim-control:hover {
+    background: hsla(0 36% 81% / 0.2);
+    border-color: hsl(0 36% 81%);
+    color: hsl(0 36% 81%);
+  }
+
+  .anim-control.active {
+    background: hsl(0 36% 81%);
+    color: hsl(180 100% 10%);
+  }
+
+  /* Floating Gradient Orbs */
+  .gradient-orb {
+    @apply absolute rounded-full opacity-30 blur-3xl pointer-events-none;
+  }
+
+  .gradient-orb-1 {
+    @apply gradient-orb w-96 h-96 -top-48 -right-48;
+    background: hsl(0 36% 81%);
+  }
+
+  .gradient-orb-2 {
+    @apply gradient-orb w-80 h-80 -bottom-40 -left-40;
+    background: hsl(157 100% 30%);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(189 16% 78%), hsl(0 36% 81%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-gradient {
+    border: 1px solid transparent;
+    background: linear-gradient(var(--glass-bg), var(--glass-bg)) padding-box,
+                linear-gradient(135deg, hsla(189 16% 78% / 0.3), hsla(0 36% 81% / 0.3)) border-box;
+  }
+}
+
+/* Prism.js Custom Theme */
+code[class*="language-"],
+pre[class*="language-"] {
+  font-family: 'JetBrains Mono', monospace;
+  color: hsl(189 16% 78%);
+  text-shadow: none;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: hsl(189 16% 50%);
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: hsl(189 16% 60%);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: hsl(0 36% 81%);
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: hsl(40 100% 70%);
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: hsl(189 16% 78%);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: hsl(0 36% 81%);
+  font-weight: 500;
+}
+
+.token.function,
+.token.class-name {
+  color: hsl(157 100% 50%);
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: hsl(30 100% 70%);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsla(180 100% 10% / 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsla(189 16% 78% / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsla(0 36% 81% / 0.5);
 }

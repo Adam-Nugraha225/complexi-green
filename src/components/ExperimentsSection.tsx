@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Play, BarChart3, Table2 } from "lucide-react";
-import { runExperiments, ExperimentResult } from "@/lib/algorithms";
+import { BarChart3, Table2, Plus, Trash2 } from "lucide-react";
+import { iterativeSquareSum, recursiveSquareSum } from "@/lib/algorithms";
 import {
   LineChart,
   Line,
@@ -13,23 +13,68 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+interface ExperimentResult {
+  n: number;
+  iterativeTime: number;
+  recursiveTime: number;
+  iterativeOps: number;
+  recursiveOps: number;
+}
+
 const ExperimentsSection = () => {
-  const [results, setResults] = useState<ExperimentResult[]>([]);
-  const [isRunning, setIsRunning] = useState(false);
+  const [nInputs, setNInputs] = useState<number[]>([1, 10, 20, 50, 100, 500, 1000, 2000, 5000, 10000]);
+  const [newN, setNewN] = useState<string>("");
   const [view, setView] = useState<"table" | "chart">("chart");
 
-  const handleRunExperiments = () => {
-    setIsRunning(true);
-    setTimeout(() => {
-      const data = runExperiments();
-      setResults(data);
-      setIsRunning(false);
-    }, 500);
+  // Run experiment for a single n value
+  const runSingleExperiment = (n: number): ExperimentResult => {
+    // Iterative
+    const iterStart = performance.now();
+    iterativeSquareSum(n);
+    const iterEnd = performance.now();
+    const iterativeTime = iterEnd - iterStart;
+
+    // Recursive
+    const recurStart = performance.now();
+    recursiveSquareSum(n);
+    const recurEnd = performance.now();
+    const recursiveTime = recurEnd - recurStart;
+
+    return {
+      n,
+      iterativeTime,
+      recursiveTime,
+      iterativeOps: n,
+      recursiveOps: n,
+    };
   };
 
-  useEffect(() => {
-    handleRunExperiments();
-  }, []);
+  // Calculate results based on nInputs - updates instantly when nInputs changes
+  const results = useMemo(() => {
+    return nInputs
+      .sort((a, b) => a - b)
+      .map((n) => runSingleExperiment(n));
+  }, [nInputs]);
+
+  const addNValue = () => {
+    const value = parseInt(newN);
+    if (!isNaN(value) && value > 0 && value <= 100000 && !nInputs.includes(value)) {
+      setNInputs([...nInputs, value]);
+      setNewN("");
+    }
+  };
+
+  const removeNValue = (n: number) => {
+    if (nInputs.length > 1) {
+      setNInputs(nInputs.filter((v) => v !== n));
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      addNValue();
+    }
+  };
 
   const chartData = results.map((r) => ({
     n: r.n,
@@ -59,23 +104,68 @@ const ExperimentsSection = () => {
           </p>
         </motion.div>
 
-        {/* Controls */}
+        {/* Input Controls */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+          className="glass-card p-6 mb-8"
         >
-          <button
-            onClick={handleRunExperiments}
-            disabled={isRunning}
-            className="btn-pill-accent"
-          >
-            <Play className={`w-4 h-4 mr-2 ${isRunning ? "animate-spin" : ""}`} />
-            {isRunning ? "Menjalankan..." : "Jalankan Ulang Eksperimen"}
-          </button>
+          <h3 className="text-blush font-semibold mb-4 text-center">Input Nilai n</h3>
+          
+          {/* Add new n input */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                value={newN}
+                onChange={(e) => setNewN(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Masukkan nilai n (1-100000)"
+                min="1"
+                max="100000"
+                className="w-64 px-4 py-3 rounded-full bg-dark-emerald/50 border border-mist/20 text-mist placeholder:text-mist/50 focus:outline-none focus:border-blush/50 transition-colors"
+              />
+              <button
+                onClick={addNValue}
+                className="btn-pill-accent"
+              >
+                <Plus className="w-4 h-4 mr-1" />
+                Tambah
+              </button>
+            </div>
+          </div>
 
+          {/* Current n values as chips */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {nInputs.sort((a, b) => a - b).map((n) => (
+              <div
+                key={n}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-forest/50 border border-mist/20 text-mist text-sm"
+              >
+                <span className="font-mono font-semibold">{n.toLocaleString()}</span>
+                {nInputs.length > 1 && (
+                  <button
+                    onClick={() => removeNValue(n)}
+                    className="text-blush/70 hover:text-blush transition-colors"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* View Toggle */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="flex justify-center mb-8"
+        >
           <div className="tab-switch">
             <button
               onClick={() => setView("chart")}
@@ -202,7 +292,7 @@ const ExperimentsSection = () => {
                         <td>{r.iterativeOps.toLocaleString()}</td>
                         <td>{r.recursiveOps.toLocaleString()}</td>
                         <td className="highlight">
-                          {r.iterativeTime < r.recursiveTime ? "Iteratif" : "Rekursif"}
+                          {r.iterativeTime < r.recursiveTime ? "Iteratif" : r.recursiveTime < r.iterativeTime ? "Rekursif" : "Sama"}
                         </td>
                       </tr>
                     ))}
@@ -225,7 +315,6 @@ const ExperimentsSection = () => {
                 const minN = results.length > 0 ? results[0].n : 0;
                 const iterativeWins = results.filter(r => r.iterativeTime < r.recursiveTime).length;
                 const recursiveWins = results.filter(r => r.recursiveTime < r.iterativeTime).length;
-                const ties = results.length - iterativeWins - recursiveWins;
                 const avgIterativeTime = results.length > 0 ? results.reduce((sum, r) => sum + r.iterativeTime, 0) / results.length : 0;
                 const avgRecursiveTime = results.length > 0 ? results.reduce((sum, r) => sum + r.recursiveTime, 0) / results.length : 0;
                 
@@ -235,7 +324,7 @@ const ExperimentsSection = () => {
                   : (avgIterativeTime > 0 ? ((avgIterativeTime - avgRecursiveTime) / avgIterativeTime * 100) : 0);
                 
                 const winner = iterativeWins > recursiveWins ? "Iteratif" : recursiveWins > iterativeWins ? "Rekursif" : "Seimbang";
-                const winnerCount = winner === "Iteratif" ? iterativeWins : winner === "Rekursif" ? recursiveWins : ties;
+                const winnerCount = winner === "Iteratif" ? iterativeWins : recursiveWins;
                 
                 const getConclusion = () => {
                   if (winner === "Iteratif") {

@@ -12,13 +12,12 @@ import "prismjs/components/prism-c";
 import "prismjs/components/prism-cpp";
 import { codeSnippets } from "@/lib/algorithms";
 
-type Language = "cpp" | "go" | "react" | "pseudocode";
+type Language = "cpp" | "go" | "pseudocode";
 type Algorithm = "iterative" | "recursive";
 
 const languages: { id: Language; label: string; prismLang: string }[] = [
   { id: "cpp", label: "C++", prismLang: "cpp" },
   { id: "go", label: "Go", prismLang: "go" },
-  { id: "react", label: "React", prismLang: "tsx" },
   { id: "pseudocode", label: "Pseudocode", prismLang: "clike" },
 ];
 

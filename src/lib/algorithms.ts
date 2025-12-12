@@ -184,100 +184,40 @@ func main() {
     fmt.Printf("Jumlah deret kuadrat 1..%d = %d\\n", n, recursiveSquareSum(n))
 }`,
   },
-  react: {
-    iterative: `// React/TypeScript - Algoritma Iteratif
-export function iterativeSquareSum(n: number): { sum: number; operations: number } {
-  let sum = 0;
-  let operations = 0;
-
-  for (let i = 1; i <= n; i++) {
-    sum += i * i;     // Kuadratkan dan tambahkan
-    operations += 3;  // perbandingan, perkalian, penjumlahan
-  }
-
-  return { sum, operations };
-}
-
-// Contoh penggunaan di React Component
-const SquareCalculator: React.FC = () => {
-  const [n, setN] = useState(10);
-  const result = iterativeSquareSum(n);
-  
-  return (
-    <div>
-      <p>Jumlah: {result.sum}</p>
-      <p>Operasi: {result.operations}</p>
-    </div>
-  );
-};`,
-    recursive: `// React/TypeScript - Algoritma Rekursif
-export function recursiveSquareSum(n: number): { sum: number; operations: number } {
-  let operations = 0;
-
-  function recurse(current: number): number {
-    operations++;  // Function call sebagai operasi
-    if (current === 0) return 0;  // Base case
-    
-    operations += 2;  // perkalian dan penjumlahan
-    return (current * current) + recurse(current - 1);
-  }
-
-  const sum = recurse(n);
-  return { sum, operations };
-}
-
-// Contoh penggunaan di React Component
-const RecursiveCalculator: React.FC = () => {
-  const [n, setN] = useState(10);
-  const result = recursiveSquareSum(n);
-  
-  return (
-    <div>
-      <p>Jumlah: {result.sum}</p>
-      <p>Operasi: {result.operations}</p>
-    </div>
-  );
-};`,
-  },
   pseudocode: {
-    iterative: `ALGORITMA IterativeSquareSum
-// Menghitung jumlah deret bilangan kuadrat secara iteratif
-// Input: n (bilangan bulat positif)
-// Output: sum (jumlah deret kuadrat 1² + 2² + ... + n²)
-
-BEGIN
+    iterative: `function iterativeSquareSum(n : integer) → integer
+    sum : integer
+    i : integer
     sum ← 0
-    operations ← 0
-    
+
     FOR i ← 1 TO n DO
-        squared ← i × i           // Hitung kuadrat
-        sum ← sum + squared       // Tambahkan ke total
-        operations ← operations + 3
-    END FOR
-    
-    RETURN sum, operations
-END
+        sum ← sum + (i * i)
+    ENDFOR
 
-// Kompleksitas Waktu: O(n)
-// Kompleksitas Ruang: O(1)`,
-    recursive: `ALGORITMA RecursiveSquareSum
-// Menghitung jumlah deret bilangan kuadrat secara rekursif
-// Input: n (bilangan bulat positif)
-// Output: sum (jumlah deret kuadrat 1² + 2² + ... + n²)
+    RETURN sum
+end function
 
-FUNCTION RecursiveSquareSum(n)
-BEGIN
-    // Base Case
+
+PROGRAM UTAMA
+    n : integer
+    n ← 10
+
+    output("Jumlah deret kuadrat 1.." + n + " = " + iterativeSquareSum(n))
+END PROGRAM`,
+    recursive: `function recursiveSquareSum(n : integer) → integer
     IF n = 0 THEN
         RETURN 0
-    END IF
-    
-    // Recursive Case
-    squared ← n × n
-    RETURN squared + RecursiveSquareSum(n - 1)
-END
+    ENDIF
 
-// Kompleksitas Waktu: O(n)
-// Kompleksitas Ruang: O(n) - karena call stack`,
+    RETURN (n * n) + recursiveSquareSum(n - 1)
+end function
+
+
+PROGRAM UTAMA
+    n : integer
+    n ← 10
+
+    output("Jumlah deret kuadrat 1.." + n + " = " + recursiveSquareSum(n))
+END PROGRAM`,
   },
 };

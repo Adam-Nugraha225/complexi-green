@@ -98,18 +98,23 @@ const VisualizationSection = () => {
               <h3 className="text-blush font-semibold mb-4">Kontrol Animasi</h3>
               
               <div className="space-y-4">
-                <div>
+              <div>
                   <label className="text-mist/70 text-sm block mb-2">Nilai n:</label>
                   <input
-                    type="range"
-                    min="3"
-                    max="12"
+                    type="number"
+                    min="1"
+                    max="20"
                     value={n}
-                    onChange={(e) => setN(parseInt(e.target.value))}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value);
+                      if (val >= 1 && val <= 20) {
+                        setN(val);
+                      }
+                    }}
                     disabled={isPlaying}
-                    className="w-full accent-blush"
+                    className="w-full px-4 py-2 rounded-xl bg-emerald/50 border border-mist/20 text-foreground font-mono text-center focus:outline-none focus:border-blush"
                   />
-                  <span className="text-foreground font-mono">{n}</span>
+                  <p className="text-mist/50 text-xs mt-1">Min: 1, Max: 20</p>
                 </div>
 
                 <div>

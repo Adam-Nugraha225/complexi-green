@@ -220,11 +220,34 @@ const ExperimentsSection = () => {
               className="mt-12 glass-card p-8 text-center max-w-3xl mx-auto"
             >
               <h3 className="text-blush font-semibold text-xl mb-4">Kesimpulan Eksperimen</h3>
-              <p className="text-mist leading-relaxed">
-                Berdasarkan hasil eksperimen pada input size 1 hingga 10.000, algoritma{" "}
-                <span className="text-blush font-semibold">Iteratif</span> secara konsisten menunjukkan performa yang lebih baik
-                dengan running time yang lebih rendah dan penggunaan memori yang lebih efisien karena tidak membutuhkan call stack rekursif.
-              </p>
+              {(() => {
+                const maxN = results.length > 0 ? results[results.length - 1].n : 0;
+                const minN = results.length > 0 ? results[0].n : 0;
+                const iterativeWins = results.filter(r => r.iterativeTime <= r.recursiveTime).length;
+                const recursiveWins = results.length - iterativeWins;
+                const avgIterativeTime = results.length > 0 ? results.reduce((sum, r) => sum + r.iterativeTime, 0) / results.length : 0;
+                const avgRecursiveTime = results.length > 0 ? results.reduce((sum, r) => sum + r.recursiveTime, 0) / results.length : 0;
+                const timeDiffPercent = avgRecursiveTime > 0 ? ((avgRecursiveTime - avgIterativeTime) / avgRecursiveTime * 100).toFixed(1) : 0;
+                const winner = iterativeWins >= recursiveWins ? "Iteratif" : "Rekursif";
+                
+                return (
+                  <p className="text-mist leading-relaxed">
+                    Berdasarkan hasil eksperimen pada <span className="text-blush font-semibold">{results.length} input size</span> dari{" "}
+                    <span className="text-blush font-semibold">{minN.toLocaleString()}</span> hingga{" "}
+                    <span className="text-blush font-semibold">{maxN.toLocaleString()}</span>, algoritma{" "}
+                    <span className="text-blush font-semibold">{winner}</span> memenangkan{" "}
+                    <span className="text-blush font-semibold">{winner === "Iteratif" ? iterativeWins : recursiveWins}</span> dari{" "}
+                    <span className="text-blush font-semibold">{results.length}</span> pengujian. 
+                    Rata-rata running time Iteratif adalah{" "}
+                    <span className="text-blush font-semibold">{avgIterativeTime.toFixed(4)} ms</span> vs Rekursif{" "}
+                    <span className="text-blush font-semibold">{avgRecursiveTime.toFixed(4)} ms</span>
+                    {Number(timeDiffPercent) > 0 && (
+                      <>, dengan Iteratif <span className="text-blush font-semibold">{timeDiffPercent}%</span> lebih cepat</>
+                    )}. 
+                    Algoritma Iteratif lebih efisien karena tidak membutuhkan call stack rekursif.
+                  </p>
+                );
+              })()}
             </motion.div>
           </>
         )}

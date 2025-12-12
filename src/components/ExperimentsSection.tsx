@@ -223,28 +223,50 @@ const ExperimentsSection = () => {
               {(() => {
                 const maxN = results.length > 0 ? results[results.length - 1].n : 0;
                 const minN = results.length > 0 ? results[0].n : 0;
-                const iterativeWins = results.filter(r => r.iterativeTime <= r.recursiveTime).length;
-                const recursiveWins = results.length - iterativeWins;
+                const iterativeWins = results.filter(r => r.iterativeTime < r.recursiveTime).length;
+                const recursiveWins = results.filter(r => r.recursiveTime < r.iterativeTime).length;
+                const ties = results.length - iterativeWins - recursiveWins;
                 const avgIterativeTime = results.length > 0 ? results.reduce((sum, r) => sum + r.iterativeTime, 0) / results.length : 0;
                 const avgRecursiveTime = results.length > 0 ? results.reduce((sum, r) => sum + r.recursiveTime, 0) / results.length : 0;
-                const timeDiffPercent = avgRecursiveTime > 0 ? ((avgRecursiveTime - avgIterativeTime) / avgRecursiveTime * 100).toFixed(1) : 0;
-                const winner = iterativeWins >= recursiveWins ? "Iteratif" : "Rekursif";
+                
+                const isIterativeFaster = avgIterativeTime < avgRecursiveTime;
+                const timeDiffPercent = isIterativeFaster
+                  ? (avgRecursiveTime > 0 ? ((avgRecursiveTime - avgIterativeTime) / avgRecursiveTime * 100) : 0)
+                  : (avgIterativeTime > 0 ? ((avgIterativeTime - avgRecursiveTime) / avgIterativeTime * 100) : 0);
+                
+                const winner = iterativeWins > recursiveWins ? "Iteratif" : recursiveWins > iterativeWins ? "Rekursif" : "Seimbang";
+                const winnerCount = winner === "Iteratif" ? iterativeWins : winner === "Rekursif" ? recursiveWins : ties;
+                
+                const getConclusion = () => {
+                  if (winner === "Iteratif") {
+                    return "Algoritma Iteratif lebih efisien karena tidak membutuhkan overhead call stack seperti pada rekursi.";
+                  } else if (winner === "Rekursif") {
+                    return "Algoritma Rekursif menunjukkan performa lebih baik pada kondisi pengujian ini, kemungkinan karena optimisasi compiler atau cache.";
+                  } else {
+                    return "Kedua algoritma menunjukkan performa yang setara pada kondisi pengujian ini.";
+                  }
+                };
                 
                 return (
                   <p className="text-mist leading-relaxed">
                     Berdasarkan hasil eksperimen pada <span className="text-blush font-semibold">{results.length} input size</span> dari{" "}
                     <span className="text-blush font-semibold">{minN.toLocaleString()}</span> hingga{" "}
                     <span className="text-blush font-semibold">{maxN.toLocaleString()}</span>, algoritma{" "}
-                    <span className="text-blush font-semibold">{winner}</span> memenangkan{" "}
-                    <span className="text-blush font-semibold">{winner === "Iteratif" ? iterativeWins : recursiveWins}</span> dari{" "}
-                    <span className="text-blush font-semibold">{results.length}</span> pengujian. 
+                    <span className="text-blush font-semibold">{winner}</span>
+                    {winner !== "Seimbang" && (
+                      <> memenangkan <span className="text-blush font-semibold">{winnerCount}</span> dari{" "}
+                      <span className="text-blush font-semibold">{results.length}</span> pengujian</>
+                    )}
+                    {winner === "Seimbang" && <> dengan kedua algoritma memiliki jumlah kemenangan sama</>}. 
                     Rata-rata running time Iteratif adalah{" "}
                     <span className="text-blush font-semibold">{avgIterativeTime.toFixed(4)} ms</span> vs Rekursif{" "}
                     <span className="text-blush font-semibold">{avgRecursiveTime.toFixed(4)} ms</span>
-                    {Number(timeDiffPercent) > 0 && (
-                      <>, dengan Iteratif <span className="text-blush font-semibold">{timeDiffPercent}%</span> lebih cepat</>
-                    )}. 
-                    Algoritma Iteratif lebih efisien karena tidak membutuhkan call stack rekursif.
+                    {timeDiffPercent > 0.01 && (
+                      <>, dengan {isIterativeFaster ? "Iteratif" : "Rekursif"}{" "}
+                      <span className="text-blush font-semibold">{timeDiffPercent.toFixed(1)}%</span> lebih cepat</>
+                    )}
+                    {timeDiffPercent <= 0.01 && <>, dengan perbedaan waktu yang tidak signifikan</>}. 
+                    {getConclusion()}
                   </p>
                 );
               })()}

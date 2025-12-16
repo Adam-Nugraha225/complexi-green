@@ -237,18 +237,18 @@ const ExperimentsSection = ({ n }: ExperimentsSectionProps) => {
                       <Line
                         type="monotone"
                         dataKey="Iteratif"
-                        stroke="#034C36"
-                        strokeWidth={3}
-                        dot={{ fill: "#034C36", r: 5, strokeWidth: 2 }}
-                        activeDot={{ r: 8, fill: "#034C36", stroke: "#fff", strokeWidth: 2 }}
+                        stroke="#5FB094"
+                        strokeWidth={4}
+                        dot={{ fill: "#5FB094", r: 6, strokeWidth: 2, stroke: "#fff" }}
+                        activeDot={{ r: 10, fill: "#5FB094", stroke: "#fff", strokeWidth: 3 }}
                       />
                       <Line
                         type="monotone"
                         dataKey="Rekursif"
-                        stroke="#E3B8B8"
-                        strokeWidth={3}
-                        dot={{ fill: "#E3B8B8", r: 5, strokeWidth: 2 }}
-                        activeDot={{ r: 8, fill: "#E3B8B8", stroke: "#fff", strokeWidth: 2 }}
+                        stroke="#F5D0D0"
+                        strokeWidth={4}
+                        dot={{ fill: "#F5D0D0", r: 6, strokeWidth: 2, stroke: "#fff" }}
+                        activeDot={{ r: 10, fill: "#F5D0D0", stroke: "#fff", strokeWidth: 3 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -256,11 +256,11 @@ const ExperimentsSection = ({ n }: ExperimentsSectionProps) => {
                   {/* Legend explanation */}
                   <div className="flex justify-center gap-8 mt-6">
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-forest"></div>
+                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: "#5FB094" }}></div>
                       <span className="text-mist text-sm">Iteratif (O(n))</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-blush"></div>
+                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: "#F5D0D0" }}></div>
                       <span className="text-mist text-sm">Rekursif (O(n))</span>
                     </div>
                   </div>

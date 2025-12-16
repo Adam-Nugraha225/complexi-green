@@ -3,8 +3,12 @@ import { motion } from "framer-motion";
 import { Play, Repeat, GitCompare, Zap, Clock, Hash } from "lucide-react";
 import { iterativeSquareSum, recursiveSquareSum, AlgorithmResult } from "@/lib/algorithms";
 
-const CalculationSection = () => {
-  const [n, setN] = useState<number>(10);
+interface CalculationSectionProps {
+  n: number;
+  setN: (n: number) => void;
+}
+
+const CalculationSection = ({ n, setN }: CalculationSectionProps) => {
   const [iterativeResult, setIterativeResult] = useState<AlgorithmResult | null>(null);
   const [recursiveResult, setRecursiveResult] = useState<AlgorithmResult | null>(null);
   const [isComparing, setIsComparing] = useState(false);

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import CalculationSection from "@/components/CalculationSection";
@@ -8,15 +9,17 @@ import DocumentationSection from "@/components/DocumentationSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  const [sharedN, setSharedN] = useState<number>(10);
+
   return (
     <div className="min-h-screen">
       <Navigation />
       <main>
         <Hero />
-        <CalculationSection />
+        <CalculationSection n={sharedN} setN={setSharedN} />
         <CodeSection />
         <VisualizationSection />
-        <ExperimentsSection />
+        <ExperimentsSection n={sharedN} />
         <DocumentationSection />
       </main>
       <Footer />

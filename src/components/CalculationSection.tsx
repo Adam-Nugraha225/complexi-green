@@ -14,7 +14,7 @@ const CalculationSection = ({ n, setN }: CalculationSectionProps) => {
   const [isComparing, setIsComparing] = useState(false);
 
   const handleIterative = () => {
-    if (n > 0 && n <= 10000) {
+    if (n > 0 && n <= 5000) {
       const result = iterativeSquareSum(n);
       setIterativeResult(result);
       setIsComparing(false);
@@ -68,13 +68,13 @@ const CalculationSection = ({ n, setN }: CalculationSectionProps) => {
             <input
               type="number"
               value={n}
-              onChange={(e) => setN(Math.max(1, Math.min(10000, parseInt(e.target.value) || 1)))}
+              onChange={(e) => setN(Math.max(1, Math.min(5000, parseInt(e.target.value) || 1)))}
               className="w-full bg-emerald/50 border border-mist/20 rounded-xl px-5 py-4 text-foreground text-lg font-mono focus:outline-none focus:border-blush transition-colors"
               min="1"
-              max="10000"
+              max="5000"
             />
             <p className="text-mist/60 text-sm mt-2">
-              Nilai maksimum: 10000 (iteratif) / 5000 (rekursif)
+              Nilai maksimum: 5000
             </p>
 
             <div className="flex flex-wrap gap-3 mt-6">

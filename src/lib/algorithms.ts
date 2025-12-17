@@ -220,4 +220,73 @@ PROGRAM UTAMA
     output("Jumlah deret kuadrat 1.." + n + " = " + recursiveSquareSum(n))
 END PROGRAM`,
   },
+  react: {
+    iterative: `import { useState } from 'react';
+
+// Fungsi iteratif menghitung jumlah deret bilangan kuadrat
+function iterativeSquareSum(n: number): number {
+  let sum = 0;
+  for (let i = 1; i <= n; i++) {
+    sum += i * i;  // Operasi: perbandingan, perkalian, penjumlahan
+  }
+  return sum;
+}
+
+// Komponen React
+export default function SquareSumCalculator() {
+  const [n, setN] = useState<number>(10);
+  const [result, setResult] = useState<number | null>(null);
+
+  const handleCalculate = () => {
+    setResult(iterativeSquareSum(n));
+  };
+
+  return (
+    <div>
+      <input 
+        type="number" 
+        value={n} 
+        onChange={(e) => setN(Number(e.target.value))} 
+      />
+      <button onClick={handleCalculate}>Hitung</button>
+      {result !== null && (
+        <p>Jumlah deret kuadrat 1..{n} = {result}</p>
+      )}
+    </div>
+  );
+}`,
+    recursive: `import { useState } from 'react';
+
+// Fungsi rekursif menghitung jumlah deret bilangan kuadrat
+function recursiveSquareSum(n: number): number {
+  if (n === 0) {
+    return 0;  // Base case
+  }
+  return (n * n) + recursiveSquareSum(n - 1);  // Recursive call
+}
+
+// Komponen React
+export default function SquareSumCalculator() {
+  const [n, setN] = useState<number>(10);
+  const [result, setResult] = useState<number | null>(null);
+
+  const handleCalculate = () => {
+    setResult(recursiveSquareSum(n));
+  };
+
+  return (
+    <div>
+      <input 
+        type="number" 
+        value={n} 
+        onChange={(e) => setN(Number(e.target.value))} 
+      />
+      <button onClick={handleCalculate}>Hitung</button>
+      {result !== null && (
+        <p>Jumlah deret kuadrat 1..{n} = {result}</p>
+      )}
+    </div>
+  );
+}`,
+  },
 };

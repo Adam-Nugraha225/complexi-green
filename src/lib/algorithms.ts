@@ -116,36 +116,94 @@ export function runExperiments(): ExperimentResult[] {
 export const codeSnippets = {
   cpp: {
     iterative: `#include <iostream>
+#include <vector>
+#include <chrono>
 using namespace std;
 
+// Struct untuk hasil algoritma
+struct AlgorithmResult {
+    vector<int> sequence;
+    long long sum;
+    int operations;
+    double executionTime;
+};
+
 // Fungsi iteratif menghitung jumlah deret bilangan kuadrat
-int iterativeSquareSum(int n) {
-    int sum = 0;
+AlgorithmResult iterativeSquareSum(int n) {
+    auto startTime = chrono::high_resolution_clock::now();
+    vector<int> sequence;
+    long long sum = 0;
+    int operations = 0;
+
     for (int i = 1; i <= n; i++) {
-        sum += i * i;  // Operasi: perbandingan, perkalian, penjumlahan
+        int squared = i * i;
+        sequence.push_back(squared);
+        sum += squared;
+        operations += 3; // perbandingan, perkalian, penjumlahan
     }
-    return sum;
+
+    auto endTime = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> duration = endTime - startTime;
+
+    return {sequence, sum, operations, duration.count()};
 }
 
 int main() {
     int n = 10;
-    cout << "Jumlah deret kuadrat 1.." << n << " = " << iterativeSquareSum(n);
+    AlgorithmResult result = iterativeSquareSum(n);
+    
+    cout << "Jumlah deret kuadrat 1.." << n << " = " << result.sum << endl;
+    cout << "Jumlah operasi: " << result.operations << endl;
+    cout << "Waktu eksekusi: " << result.executionTime << " ms" << endl;
     return 0;
 }`,
     recursive: `#include <iostream>
+#include <vector>
+#include <chrono>
 using namespace std;
 
+// Struct untuk hasil algoritma
+struct AlgorithmResult {
+    vector<int> sequence;
+    long long sum;
+    int operations;
+    double executionTime;
+};
+
+int operations = 0;
+vector<int> sequence;
+
 // Fungsi rekursif menghitung jumlah deret bilangan kuadrat
-int recursiveSquareSum(int n) {
+long long recurse(int n) {
+    operations++; // function call
     if (n == 0) {
-        return 0;  // Base case
+        return 0;
     }
-    return (n * n) + recursiveSquareSum(n - 1);  // Recursive call
+    int squared = n * n;
+    sequence.insert(sequence.begin(), squared);
+    operations += 2; // perkalian, penjumlahan
+    return squared + recurse(n - 1);
+}
+
+AlgorithmResult recursiveSquareSum(int n) {
+    operations = 0;
+    sequence.clear();
+    
+    auto startTime = chrono::high_resolution_clock::now();
+    long long sum = recurse(n);
+    auto endTime = chrono::high_resolution_clock::now();
+    
+    chrono::duration<double, milli> duration = endTime - startTime;
+    return {sequence, sum, operations, duration.count()};
 }
 
 int main() {
     int n = 10;
-    cout << "Jumlah deret kuadrat 1.." << n << " = " << recursiveSquareSum(n);
+    AlgorithmResult result = recursiveSquareSum(n);
+    
+    cout << "Jumlah deret kuadrat 1.." << n << " = " << result.sum << endl;
+    cout << "Jumlah operasi: " << result.operations << endl;
+    cout << "Waktu eksekusi: " << result.executionTime << " ms" << endl;
     return 0;
 }`,
   },

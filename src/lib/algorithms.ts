@@ -223,22 +223,46 @@ END PROGRAM`,
   react: {
     iterative: `import { useState } from 'react';
 
+// Interface untuk hasil algoritma
+interface AlgorithmResult {
+  sequence: number[];
+  sum: number;
+  operations: number;
+  executionTime: number;
+}
+
 // Fungsi iteratif menghitung jumlah deret bilangan kuadrat
-function iterativeSquareSum(n: number): number {
+function iterativeSquareSum(n: number): AlgorithmResult {
+  const startTime = performance.now();
+  const sequence: number[] = [];
   let sum = 0;
+  let operations = 0;
+
   for (let i = 1; i <= n; i++) {
-    sum += i * i;  // Operasi: perbandingan, perkalian, penjumlahan
+    const squared = i * i;
+    sequence.push(squared);
+    sum += squared;
+    operations += 3; // perbandingan, perkalian, penjumlahan
   }
-  return sum;
+
+  const endTime = performance.now();
+  return {
+    sequence,
+    sum,
+    operations,
+    executionTime: endTime - startTime,
+  };
 }
 
 // Komponen React
 export default function SquareSumCalculator() {
   const [n, setN] = useState<number>(10);
-  const [result, setResult] = useState<number | null>(null);
+  const [result, setResult] = useState<AlgorithmResult | null>(null);
 
   const handleCalculate = () => {
-    setResult(iterativeSquareSum(n));
+    if (n > 0 && n <= 10000) {
+      setResult(iterativeSquareSum(n));
+    }
   };
 
   return (
@@ -246,32 +270,67 @@ export default function SquareSumCalculator() {
       <input 
         type="number" 
         value={n} 
-        onChange={(e) => setN(Number(e.target.value))} 
+        onChange={(e) => setN(Math.max(1, Math.min(10000, Number(e.target.value) || 1)))}
+        min="1"
+        max="10000"
       />
-      <button onClick={handleCalculate}>Hitung</button>
-      {result !== null && (
-        <p>Jumlah deret kuadrat 1..{n} = {result}</p>
+      <button onClick={handleCalculate}>Hitung Iteratif</button>
+      {result && (
+        <div>
+          <p>Jumlah: {result.sum.toLocaleString()}</p>
+          <p>Operasi: {result.operations.toLocaleString()}</p>
+          <p>Waktu: {result.executionTime.toFixed(4)} ms</p>
+        </div>
       )}
     </div>
   );
 }`,
     recursive: `import { useState } from 'react';
 
+// Interface untuk hasil algoritma
+interface AlgorithmResult {
+  sequence: number[];
+  sum: number;
+  operations: number;
+  executionTime: number;
+}
+
 // Fungsi rekursif menghitung jumlah deret bilangan kuadrat
-function recursiveSquareSum(n: number): number {
-  if (n === 0) {
-    return 0;  // Base case
+function recursiveSquareSum(n: number, memo: { ops: number } = { ops: 0 }): AlgorithmResult {
+  const startTime = performance.now();
+  const sequence: number[] = [];
+
+  function recurse(current: number): number {
+    memo.ops += 1; // function call
+    if (current === 0) {
+      return 0;
+    }
+    const squared = current * current;
+    sequence.unshift(squared);
+    memo.ops += 2; // perkalian, penjumlahan
+    return squared + recurse(current - 1);
   }
-  return (n * n) + recursiveSquareSum(n - 1);  // Recursive call
+
+  const sum = recurse(n);
+  const endTime = performance.now();
+
+  return {
+    sequence,
+    sum,
+    operations: memo.ops,
+    executionTime: endTime - startTime,
+  };
 }
 
 // Komponen React
 export default function SquareSumCalculator() {
   const [n, setN] = useState<number>(10);
-  const [result, setResult] = useState<number | null>(null);
+  const [result, setResult] = useState<AlgorithmResult | null>(null);
 
   const handleCalculate = () => {
-    setResult(recursiveSquareSum(n));
+    if (n > 0 && n <= 10000) {
+      setResult(recursiveSquareSum(n));
+    }
   };
 
   return (
@@ -279,11 +338,17 @@ export default function SquareSumCalculator() {
       <input 
         type="number" 
         value={n} 
-        onChange={(e) => setN(Number(e.target.value))} 
+        onChange={(e) => setN(Math.max(1, Math.min(10000, Number(e.target.value) || 1)))}
+        min="1"
+        max="10000"
       />
-      <button onClick={handleCalculate}>Hitung</button>
-      {result !== null && (
-        <p>Jumlah deret kuadrat 1..{n} = {result}</p>
+      <button onClick={handleCalculate}>Hitung Rekursif</button>
+      {result && (
+        <div>
+          <p>Jumlah: {result.sum.toLocaleString()}</p>
+          <p>Operasi: {result.operations.toLocaleString()}</p>
+          <p>Waktu: {result.executionTime.toFixed(4)} ms</p>
+        </div>
       )}
     </div>
   );

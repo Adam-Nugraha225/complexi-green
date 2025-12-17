@@ -279,137 +279,28 @@ PROGRAM UTAMA
 END PROGRAM`,
   },
   react: {
-    iterative: `import { useState } from 'react';
-
-// Interface untuk hasil algoritma
-interface AlgorithmResult {
-  sequence: number[];
-  sum: number;
-  operations: number;
-  executionTime: number;
-}
-
-// Fungsi iteratif menghitung jumlah deret bilangan kuadrat
-function iterativeSquareSum(n: number): AlgorithmResult {
-  const startTime = performance.now();
-  const sequence: number[] = [];
+    iterative: `// Fungsi iteratif menghitung jumlah deret bilangan kuadrat
+function iterativeSquareSum(n: number): number {
   let sum = 0;
-  let operations = 0;
-
   for (let i = 1; i <= n; i++) {
-    const squared = i * i;
-    sequence.push(squared);
-    sum += squared;
-    operations += 3; // perbandingan, perkalian, penjumlahan
+    sum += i * i;  // Operasi: perbandingan, perkalian, penjumlahan
   }
-
-  const endTime = performance.now();
-  return {
-    sequence,
-    sum,
-    operations,
-    executionTime: endTime - startTime,
-  };
+  return sum;
 }
 
-// Komponen React
-export default function SquareSumCalculator() {
-  const [n, setN] = useState<number>(10);
-  const [result, setResult] = useState<AlgorithmResult | null>(null);
-
-  const handleCalculate = () => {
-    if (n > 0 && n <= 10000) {
-      setResult(iterativeSquareSum(n));
-    }
-  };
-
-  return (
-    <div>
-      <input 
-        type="number" 
-        value={n} 
-        onChange={(e) => setN(Math.max(1, Math.min(10000, Number(e.target.value) || 1)))}
-        min="1"
-        max="10000"
-      />
-      <button onClick={handleCalculate}>Hitung Iteratif</button>
-      {result && (
-        <div>
-          <p>Jumlah: {result.sum.toLocaleString()}</p>
-          <p>Operasi: {result.operations.toLocaleString()}</p>
-          <p>Waktu: {result.executionTime.toFixed(4)} ms</p>
-        </div>
-      )}
-    </div>
-  );
-}`,
-    recursive: `import { useState } from 'react';
-
-// Interface untuk hasil algoritma
-interface AlgorithmResult {
-  sequence: number[];
-  sum: number;
-  operations: number;
-  executionTime: number;
-}
-
-// Fungsi rekursif menghitung jumlah deret bilangan kuadrat
-function recursiveSquareSum(n: number, memo: { ops: number } = { ops: 0 }): AlgorithmResult {
-  const startTime = performance.now();
-  const sequence: number[] = [];
-
-  function recurse(current: number): number {
-    memo.ops += 1; // function call
-    if (current === 0) {
-      return 0;
-    }
-    const squared = current * current;
-    sequence.unshift(squared);
-    memo.ops += 2; // perkalian, penjumlahan
-    return squared + recurse(current - 1);
+// Contoh penggunaan
+const n = 10;
+console.log(\`Jumlah deret kuadrat 1..\${n} = \${iterativeSquareSum(n)}\`);`,
+    recursive: `// Fungsi rekursif menghitung jumlah deret bilangan kuadrat
+function recursiveSquareSum(n: number): number {
+  if (n === 0) {
+    return 0;  // Base case
   }
-
-  const sum = recurse(n);
-  const endTime = performance.now();
-
-  return {
-    sequence,
-    sum,
-    operations: memo.ops,
-    executionTime: endTime - startTime,
-  };
+  return (n * n) + recursiveSquareSum(n - 1);  // Recursive call
 }
 
-// Komponen React
-export default function SquareSumCalculator() {
-  const [n, setN] = useState<number>(10);
-  const [result, setResult] = useState<AlgorithmResult | null>(null);
-
-  const handleCalculate = () => {
-    if (n > 0 && n <= 10000) {
-      setResult(recursiveSquareSum(n));
-    }
-  };
-
-  return (
-    <div>
-      <input 
-        type="number" 
-        value={n} 
-        onChange={(e) => setN(Math.max(1, Math.min(10000, Number(e.target.value) || 1)))}
-        min="1"
-        max="10000"
-      />
-      <button onClick={handleCalculate}>Hitung Rekursif</button>
-      {result && (
-        <div>
-          <p>Jumlah: {result.sum.toLocaleString()}</p>
-          <p>Operasi: {result.operations.toLocaleString()}</p>
-          <p>Waktu: {result.executionTime.toFixed(4)} ms</p>
-        </div>
-      )}
-    </div>
-  );
-}`,
+// Contoh penggunaan
+const n = 10;
+console.log(\`Jumlah deret kuadrat 1..\${n} = \${recursiveSquareSum(n)}\`);`,
   },
 };

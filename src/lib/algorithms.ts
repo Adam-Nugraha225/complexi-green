@@ -37,29 +37,41 @@ export function iterativeSquareSum(n: number): AlgorithmResult {
   };
 }
 
-// Recursive algorithm to calculate sum of square numbers
-export function recursiveSquareSum(n: number, memo: { ops: number } = { ops: 0 }): AlgorithmResult {
+// Recursive algorithm using trampoline to avoid stack overflow
+export function recursiveSquareSum(n: number): AlgorithmResult {
   const startTime = performance.now();
   const sequence: number[] = [];
+  let operations = 0;
 
-  function recurse(current: number): number {
-    memo.ops += 1; // function call
+  // Trampoline function for tail-call optimization simulation
+  type Thunk = () => Thunk | number;
+  
+  function trampoline(fn: Thunk): number {
+    let result: Thunk | number = fn;
+    while (typeof result === 'function') {
+      result = result();
+    }
+    return result;
+  }
+
+  function recurseHelper(current: number, acc: number): Thunk | number {
+    operations += 1; // function call
     if (current === 0) {
-      return 0;
+      return acc;
     }
     const squared = current * current;
     sequence.unshift(squared);
-    memo.ops += 2; // multiplication, addition
-    return squared + recurse(current - 1);
+    operations += 2; // multiplication, addition
+    return () => recurseHelper(current - 1, acc + squared);
   }
 
-  const sum = recurse(n);
+  const sum = trampoline(() => recurseHelper(n, 0));
   const endTime = performance.now();
 
   return {
     sequence,
     sum,
-    operations: memo.ops,
+    operations,
     executionTime: endTime - startTime,
   };
 }

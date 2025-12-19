@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Play, Repeat, GitCompare, Zap, Clock, Hash } from "lucide-react";
+import { toast } from "sonner";
 import { iterativeSquareSum, recursiveSquareSum, AlgorithmResult } from "@/lib/algorithms";
 
 interface CalculationSectionProps {
@@ -17,25 +18,31 @@ const CalculationSection = ({ n, setN }: CalculationSectionProps) => {
     if (n > 0 && n <= 10000) {
       const result = iterativeSquareSum(n);
       setIterativeResult(result);
+      setRecursiveResult(null);
       setIsComparing(false);
     }
   };
 
   const handleRecursive = () => {
-    if (n > 0 && n <= 5000) {
+    if (n > 0 && n <= 1000) {
       const result = recursiveSquareSum(n);
       setRecursiveResult(result);
+      setIterativeResult(null);
       setIsComparing(false);
+    } else if (n > 1000) {
+      toast.error("Nilai n untuk rekursif maksimal 1000 (batas stack)");
     }
   };
 
   const handleCompare = () => {
-    if (n > 0 && n <= 5000) {
+    if (n > 0 && n <= 1000) {
       const iter = iterativeSquareSum(n);
       const rec = recursiveSquareSum(n);
       setIterativeResult(iter);
       setRecursiveResult(rec);
       setIsComparing(true);
+    } else if (n > 1000) {
+      toast.error("Nilai n untuk perbandingan maksimal 1000 (batas rekursif)");
     }
   };
 

@@ -114,134 +114,6 @@ export function runExperiments(): ExperimentResult[] {
 
 // Code snippets for different languages
 export const codeSnippets = {
-  cpp: {
-    iterative: `#include <iostream>
-#include <vector>
-#include <chrono>
-using namespace std;
-
-// Struct untuk hasil algoritma
-struct AlgorithmResult {
-    vector<int> sequence;
-    long long sum;
-    int operations;
-    double executionTime;
-};
-
-// Fungsi iteratif menghitung jumlah deret bilangan kuadrat
-AlgorithmResult iterativeSquareSum(int n) {
-    auto startTime = chrono::high_resolution_clock::now();
-    vector<int> sequence;
-    long long sum = 0;
-    int operations = 0;
-
-    for (int i = 1; i <= n; i++) {
-        int squared = i * i;
-        sequence.push_back(squared);
-        sum += squared;
-        operations += 3; // perbandingan, perkalian, penjumlahan
-    }
-
-    auto endTime = chrono::high_resolution_clock::now();
-    chrono::duration<double, milli> duration = endTime - startTime;
-
-    return {sequence, sum, operations, duration.count()};
-}
-
-int main() {
-    int n = 10;
-    AlgorithmResult result = iterativeSquareSum(n);
-    
-    cout << "Jumlah deret kuadrat 1.." << n << " = " << result.sum << endl;
-    cout << "Jumlah operasi: " << result.operations << endl;
-    cout << "Waktu eksekusi: " << result.executionTime << " ms" << endl;
-    return 0;
-}`,
-    recursive: `#include <iostream>
-#include <vector>
-#include <chrono>
-using namespace std;
-
-// Struct untuk hasil algoritma
-struct AlgorithmResult {
-    vector<int> sequence;
-    long long sum;
-    int operations;
-    double executionTime;
-};
-
-int operations = 0;
-vector<int> sequence;
-
-// Fungsi rekursif menghitung jumlah deret bilangan kuadrat
-long long recurse(int n) {
-    operations++; // function call
-    if (n == 0) {
-        return 0;
-    }
-    int squared = n * n;
-    sequence.insert(sequence.begin(), squared);
-    operations += 2; // perkalian, penjumlahan
-    return squared + recurse(n - 1);
-}
-
-AlgorithmResult recursiveSquareSum(int n) {
-    operations = 0;
-    sequence.clear();
-    
-    auto startTime = chrono::high_resolution_clock::now();
-    long long sum = recurse(n);
-    auto endTime = chrono::high_resolution_clock::now();
-    
-    chrono::duration<double, milli> duration = endTime - startTime;
-    return {sequence, sum, operations, duration.count()};
-}
-
-int main() {
-    int n = 10;
-    AlgorithmResult result = recursiveSquareSum(n);
-    
-    cout << "Jumlah deret kuadrat 1.." << n << " = " << result.sum << endl;
-    cout << "Jumlah operasi: " << result.operations << endl;
-    cout << "Waktu eksekusi: " << result.executionTime << " ms" << endl;
-    return 0;
-}`,
-  },
-  go: {
-    iterative: `package main
-
-import "fmt"
-
-// iterativeSquareSum menghitung jumlah deret bilangan kuadrat secara iteratif
-func iterativeSquareSum(n int) int {
-    sum := 0
-    for i := 1; i <= n; i++ {
-        sum += i * i  // Operasi: perbandingan, perkalian, penjumlahan
-    }
-    return sum
-}
-
-func main() {
-    n := 10
-    fmt.Printf("Jumlah deret kuadrat 1..%d = %d\\n", n, iterativeSquareSum(n))
-}`,
-    recursive: `package main
-
-import "fmt"
-
-// recursiveSquareSum menghitung jumlah deret bilangan kuadrat secara rekursif
-func recursiveSquareSum(n int) int {
-    if n == 0 {
-        return 0  // Base case
-    }
-    return (n * n) + recursiveSquareSum(n-1)  // Recursive call
-}
-
-func main() {
-    n := 10
-    fmt.Printf("Jumlah deret kuadrat 1..%d = %d\\n", n, recursiveSquareSum(n))
-}`,
-  },
   pseudocode: {
     iterative: `function iterativeSquareSum(n : integer) → integer
     sum : integer
@@ -253,54 +125,28 @@ func main() {
     ENDFOR
 
     RETURN sum
-end function
-
-
-PROGRAM UTAMA
-    n : integer
-    n ← 10
-
-    output("Jumlah deret kuadrat 1.." + n + " = " + iterativeSquareSum(n))
-END PROGRAM`,
+end function`,
     recursive: `function recursiveSquareSum(n : integer) → integer
     IF n = 0 THEN
         RETURN 0
     ENDIF
 
     RETURN (n * n) + recursiveSquareSum(n - 1)
-end function
-
-
-PROGRAM UTAMA
-    n : integer
-    n ← 10
-
-    output("Jumlah deret kuadrat 1.." + n + " = " + recursiveSquareSum(n))
-END PROGRAM`,
+end function`,
   },
   react: {
-    iterative: `// Fungsi iteratif menghitung jumlah deret bilangan kuadrat
-function iterativeSquareSum(n: number): number {
+    iterative: `function iterativeSquareSum(n: number): number {
   let sum = 0;
   for (let i = 1; i <= n; i++) {
-    sum += i * i;  // Operasi: perbandingan, perkalian, penjumlahan
+    sum += i * i;
   }
   return sum;
-}
-
-// Contoh penggunaan
-const n = 10;
-console.log(\`Jumlah deret kuadrat 1..\${n} = \${iterativeSquareSum(n)}\`);`,
-    recursive: `// Fungsi rekursif menghitung jumlah deret bilangan kuadrat
-function recursiveSquareSum(n: number): number {
+}`,
+    recursive: `function recursiveSquareSum(n: number): number {
   if (n === 0) {
-    return 0;  // Base case
+    return 0;
   }
-  return (n * n) + recursiveSquareSum(n - 1);  // Recursive call
-}
-
-// Contoh penggunaan
-const n = 10;
-console.log(\`Jumlah deret kuadrat 1..\${n} = \${recursiveSquareSum(n)}\`);`,
+  return (n * n) + recursiveSquareSum(n - 1);
+}`,
   },
 };

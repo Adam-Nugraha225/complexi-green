@@ -29,6 +29,7 @@ const ExperimentsSection = ({ n }: ExperimentsSectionProps) => {
   const [results, setResults] = useState<ExperimentResult[]>([]);
   const [view, setView] = useState<"table" | "chart">("chart");
   const [hasRun, setHasRun] = useState(false);
+  const [cachedN, setCachedN] = useState<number | null>(null);
 
   // Generate test sizes based on n
   const getTestSizes = (maxN: number): number[] => {
@@ -47,24 +48,47 @@ const ExperimentsSection = ({ n }: ExperimentsSectionProps) => {
     return sizes.sort((a, b) => a - b);
   };
 
+  // Run algorithm multiple times and get average time for consistency
+  const getAverageTime = (algorithm: (size: number) => void, size: number, runs: number = 5): number => {
+    const times: number[] = [];
+    
+    // Warm-up run to stabilize JIT compilation
+    algorithm(size);
+    
+    for (let i = 0; i < runs; i++) {
+      const start = performance.now();
+      algorithm(size);
+      const end = performance.now();
+      times.push(end - start);
+    }
+    
+    // Remove outliers (min and max) and average the rest for more consistent results
+    if (times.length >= 3) {
+      times.sort((a, b) => a - b);
+      const trimmedTimes = times.slice(1, -1); // Remove first and last (outliers)
+      return trimmedTimes.reduce((sum, t) => sum + t, 0) / trimmedTimes.length;
+    }
+    
+    return times.reduce((sum, t) => sum + t, 0) / times.length;
+  };
+
   const runExperiments = () => {
+    // If we already ran experiments for this n, don't re-run (keep cached results)
+    if (cachedN === n && hasRun && results.length > 0) {
+      return;
+    }
+
     const testSizes = getTestSizes(n);
     const newResults: ExperimentResult[] = [];
 
     for (const size of testSizes) {
-      // Iterative
-      const iterStart = performance.now();
-      iterativeSquareSum(size);
-      const iterEnd = performance.now();
-      const iterativeTime = iterEnd - iterStart;
+      // Iterative - run multiple times and average
+      const iterativeTime = getAverageTime(() => iterativeSquareSum(size), size, 5);
 
-      // Recursive (limit to 5000 to prevent stack overflow)
+      // Recursive - run multiple times and average
       let recursiveTime = 0;
-      if (size <= 5000) {
-        const recurStart = performance.now();
-        recursiveSquareSum(size);
-        const recurEnd = performance.now();
-        recursiveTime = recurEnd - recurStart;
+      if (size <= 10000) {
+        recursiveTime = getAverageTime(() => recursiveSquareSum(size), size, 5);
       }
 
       newResults.push({
@@ -72,12 +96,13 @@ const ExperimentsSection = ({ n }: ExperimentsSectionProps) => {
         iterativeTime,
         recursiveTime,
         iterativeOps: size,
-        recursiveOps: size,
+        recursiveOps: size + 1, // +1 for base case call
       });
     }
 
     setResults(newResults);
     setHasRun(true);
+    setCachedN(n);
   };
 
   const chartData = results.map((r) => ({

@@ -5,6 +5,7 @@ import CalculationSection from "@/components/CalculationSection";
 import CodeSection from "@/components/CodeSection";
 import VisualizationSection from "@/components/VisualizationSection";
 import ExperimentsSection from "@/components/ExperimentsSection";
+import AnalysisSection from "@/components/AnalysisSection";
 import DocumentationSection from "@/components/DocumentationSection";
 import Footer from "@/components/Footer";
 
@@ -20,6 +21,7 @@ const Index = () => {
         <CodeSection />
         <VisualizationSection />
         <ExperimentsSection n={sharedN} />
+        <AnalysisSection />
         <DocumentationSection />
       </main>
       <Footer />
